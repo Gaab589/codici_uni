@@ -49,20 +49,20 @@ int main (){
     modifica_dati(persone, dimensione);
 }
 
-void flush(){
-    while (getchar() != '\n');
-}
-
+void flush(){                  //la funzione flush si utilizza dopo aver usato una scanf per pulire il buffer  
+    while (getchar() != '\n'); //dell'input dal carattere '\n'. se non usassimo questa funzione
+}                              //è possibile che '\n' venga preso come input dal prossimo scanf
+                               //la funzione flush quindi obbliga a svuotare completamente il buffer prima di riutilizzarlo
 void inserisci_dati(Persona p[], int n){
     int i;
     for(i=0; i<n; i++){
         printf("\nPersona numero %d", i+1);
 
         printf("\nInserisci il nom: ");
-        fgets(p[i].nome, MAX_LENGHT, stdin);
-        p[i].nome[strcspn(p[i].nome, "\n")]='\0';
-
-        printf("\nInserisci il cognome: ");
+        fgets(p[i].nome, MAX_LENGHT, stdin);       //per prendere come input una stringa, usiamo fgets perché,
+        p[i].nome[strcspn(p[i].nome, "\n")]='\0';  //al contrario di scanf, essa non si ferma al primo spazio 
+                                                   //questo ci permette di memorizzare stringe con una o più spazi all'interno
+        printf("\nInserisci il cognome: ");        //sempre se rientra nel numero massimo di caratteri inseribili
         fgets(p[i].cognome, MAX_LENGHT, stdin);
         p[i].cognome[strcspn(p[i].cognome, "\n")]='\0';
 
@@ -89,6 +89,14 @@ void stampa_dati(Persona *p, int n){
     }
 }
 
+
+/*
+usando l'accesso indicizzato in un array, il compilatore calcola da solo l'indirizzo a cui si richiede l'accesso
+persona[i].nome per il compilatore equivale a dire primo_indirizzo+(i*dimensione_struct)
+
+quando usiamo l'aritmetica dei puntatori siamo noi a dire a quale indirizzo di memoria deve cercare il compilatore
+persona+i->nome equivale a dirgli primo_indirizzo+i(offset) ed allora legge il contenuto seguito dalla freccia (nome)
+*/
 void cerca_cognome(Persona *p, int n){
     int i;
     char cognome_da_cercare[MAX_LENGHT];
